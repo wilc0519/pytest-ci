@@ -24,8 +24,7 @@ jobs:
         pip install -r tests/requirements.txt
     - name: Test
       run: |
-        make reinstall
-        make test
+        pytest 
     - name: Upload coverage reports to Codecov
       run: |
         codecov
