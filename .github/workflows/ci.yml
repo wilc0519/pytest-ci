@@ -23,15 +23,13 @@ jobs:
           pip install pytest-cov
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Run tests with pytest
-        run: | 
-          pytest --cov --cov-report=xml
-
-      - name: Upload coverage to Codecov
         env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        if: ${{ env.CODECOV_TOKEN }}
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: coverage.xml
-          name: ${{ matrix.os }}, python ${{ matrix.python-version }}
+          API_KEY: ${{ secrets.API_KEY }}
+          CORRECT_COVERAGE: ${{ secrets.CORRECT_COVERAGE }}
+        run: |
+          pytest --cov=./ --cov-report=xml
+          bash <(curl https://codecov.io/bash)
+          cd src
+          python request.py
+          cd ..
+      
